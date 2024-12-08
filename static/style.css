@@ -1,0 +1,316 @@
+:root {
+    --primary-color: #1a73e8;
+    --background-color: #f1f3f4;
+    --text-color: #202124;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Google Sans', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.upload-section {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+}
+.file-input, .camera-input{
+    display: none;
+}
+.upload-icon, .camera-icon, .signout-icon{
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+.upload-icon:hover, .camera-icon:hover, .signout-icon:hover {
+    transform: scale(1.5);
+}
+/* Nút cancel và capture */
+.capture-icon{
+    background:white; 
+    border:none; 
+    padding:10px; 
+    border-radius:50%;
+}
+.cancel-icon {
+    background:red; 
+    border:none; 
+    padding:10px; 
+    border-radius:50%; 
+    margin-left: 10px;
+}
+.capture-icon:hover {
+    background: transparent;
+    
+    border: 2px solid white;
+    transform: scale(1.5);
+}
+.capture-icon:hover .material-icons {
+    color: white;
+}
+.cancel-icon:hover{
+    background: transparent;
+    color: red;
+    border: 2px solid red;
+    transform: scale(1.5);
+}
+.cancel-icon:hover .material-icons {
+    color: red;
+}
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    padding-top: 20px;
+}
+.gallery-item {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    position: relative;
+}
+.gallery-item:hover {
+    transform: scale(1.03);
+}
+.gallery-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+.gallery-item-details span {
+    display: inline-block; /* Thay display: block bằng inline-block */
+    width: 100%; /* Giới hạn chiều rộng của span, có thể thay đổi nếu cần */
+    white-space: nowrap; /* Không cho phép tên file xuống dòng */
+    overflow: hidden; /* Cắt bớt nội dung thừa */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm khi cắt bớt */
+    max-width: calc(100% - 60px); /* Giới hạn chiều rộng của tên file, có thể thay đổi giá trị này */
+    margin-bottom: 5px; /* Thêm khoảng cách giữa tên và nút download */
+}
+.gallery-item-details {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    display: block;
+    flex-wrap: nowrap;  /* Đảm bảo các phần tử không xuống dòng */
+}
+.download-btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    /* padding: 5px 10px; */
+    align-items: center;
+    justify-content: center;
+}
+.download-btn:hover, .delete-btn:hover {
+    transform: scale(1.5);
+}
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    /* padding: 5px 10px; */
+    align-items: center;
+    justify-content: center;
+    color: red; /* Màu đỏ cho nút delete */
+}
+.delete-btn i {
+    font-size: 24px;
+}
+.download-btn i {
+    font-size: 24px;
+    color: #000000;
+}
+#progress-container {
+    position: fixed;
+    top: 15px;
+    left: 0;
+    width: 100%;
+    display: none;
+}
+.progress-bar {
+    width: 0%;
+    height: 5px;
+    background-color: var(--primary-color);
+    transition: width 0.5s;
+}
+#camera-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 20;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#video, #canvas, #captured-photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Giữ tỷ lệ khung hình khi phóng to */
+}
+.camera-controls {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    gap: 20px;
+}
+/* Thêm style cho phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Style cho popup chi tiết ảnh */
+#image-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+#image-popup-content {
+    position: relative;
+    background-color: white;
+    padding: 20px 32px;
+    max-width: 85%;
+    max-height: 85%;
+    overflow: auto;
+    border-radius: 10px;
+}
+#image-popup-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+}
+#image-popup-details {
+    margin-top: 10px;
+}
+/* Style cho nút Close */
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;  /* Đảm bảo nút close ở trên cùng */
+}
+
+/* Thêm hiệu ứng hover */
+.close-btn:hover {
+    color: red;  /* Thay đổi màu chữ */
+    border: 3px solid red;  /* Thêm viền đỏ khi hover */
+}
+
+/* Hiệu ứng cho login popup */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.login-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+.login-form input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.login-form button {
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.login-form button:hover {
+    opacity: 0.9;
+}
+.toggle-form {
+    text-align: center;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+.error-message {
+    color: red;
+    margin-bottom: 15px;
+    text-align: center;
+}
